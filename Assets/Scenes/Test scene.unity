@@ -570,7 +570,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 258369296110082203, guid: 5742d0035b2f28343aec0f92e8dce8b7, type: 3}
       propertyPath: tooFarDistance
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 258369296110082203, guid: 5742d0035b2f28343aec0f92e8dce8b7, type: 3}
       propertyPath: opponentTransform
@@ -3313,6 +3313,7 @@ MonoBehaviour:
   victoryScreenScoreText: {fileID: 0}
   playerHead: {fileID: 2143017273}
   scoreManager: {fileID: 0}
+  restartDelay: 5
 --- !u!4 &1173035066
 Transform:
   m_ObjectHideFlags: 0

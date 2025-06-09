@@ -183,9 +183,7 @@ public class SkeletonAgent : Agent, IDamageable
 
         isDead = true;
 
-        transform.position -= new Vector3(0f, .5f, 0f);
-
-        int deathType = Random.Range(1, 4);
+        int deathType = 1;
         animator.SetInteger("Death", deathType);
         animator.applyRootMotion = false;
         AddReward(deathPenalty);

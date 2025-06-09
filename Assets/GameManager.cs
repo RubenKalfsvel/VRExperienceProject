@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,11 +11,14 @@ public class GameManager : MonoBehaviour
     public Transform playerHead;
     public ScoreManager scoreManager;
 
+    [SerializeField] private float restartDelay = 5f;
+
     public void ShowDeathScreen()
     {
         deathScreen.SetActive(true);
         PositionScreen(deathScreen);
         Time.timeScale = 0f;
+        StartCoroutine(RestartAfterDelay());
     }
 
     public void ShowVictoryScreen()
@@ -25,6 +29,7 @@ public class GameManager : MonoBehaviour
         PositionScreen(victoryScreen);
         Debug.Log("Victory screen showing with score: " + score);
         victoryScreenScoreText.text = score.ToString();
+        StartCoroutine(RestartAfterDelay());
     }
 
     void PositionScreen(GameObject screen)
@@ -48,5 +53,11 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("StartScreen");
+    }
+
+    private IEnumerator RestartAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(restartDelay);
+        RestartLevel();
     }
 }

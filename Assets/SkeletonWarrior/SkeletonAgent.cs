@@ -32,6 +32,7 @@ public class SkeletonAgent : Agent, IDamageable
     private float currentHealth;
     private bool attackReady;
     private bool attackLanded;
+    private bool isDead = false;
 
     public override void Initialize()
     {
@@ -48,17 +49,23 @@ public class SkeletonAgent : Agent, IDamageable
 
     public void ResetAgent()
     {
+        isDead = false;
         currentHealth = maxHealth;
         transform.localPosition = GetRandomSpawnPosition();
         transform.localRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
-        animator.SetFloat("speed", 0);
+        animator.applyRootMotion = false;
+        animator.Rebind();
+        animator.Update(0f);
+        animator.SetFloat("speed", 0f);
         animator.ResetTrigger("damage");
         animator.ResetTrigger("attack");
-        animator.SetInteger("deathType", 0);
+        animator.ResetTrigger("die");
+        animator.SetInteger("Death", 0);
 
         attackReady = true;
     }
+
 
     public override void CollectObservations(VectorSensor sensor)
     {
@@ -68,6 +75,7 @@ public class SkeletonAgent : Agent, IDamageable
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        if (isDead) return;
         float moveInput = actions.ContinuousActions[0];
         float rotateInput = actions.ContinuousActions[1];
         int combatAction = actions.DiscreteActions[0];
@@ -135,13 +143,16 @@ public class SkeletonAgent : Agent, IDamageable
 
     public void StartDealDamage()
     {
+        if (isDead) return;
         weapon.GetComponentInChildren<EnemyDamageDealer>()?.StartDealDamage();
     }
 
     public void EndDealDamage()
     {
+        if (isDead) return;
         weapon.GetComponentInChildren<EnemyDamageDealer>()?.EndDealDamage();
     }
+
 
     public void ReportSuccessfulHit()
     {
@@ -153,25 +164,43 @@ public class SkeletonAgent : Agent, IDamageable
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        animator.SetTrigger("damage");
         AddReward(tookDamagePenalty);
-
         Debug.Log($"{name} took {damage} damage. Remaining HP: {currentHealth}");
 
         if (currentHealth <= 0)
         {
             Die();
         }
+        else
+        {
+            animator.SetTrigger("damage");
+        }
     }
 
     private void Die()
     {
+        if (isDead) return;
+
+        isDead = true;
+
+        transform.position -= new Vector3(0f, .5f, 0f);
+
         int deathType = Random.Range(1, 4);
-        animator.SetInteger("deathType", deathType);
+        animator.SetInteger("Death", deathType);
+        animator.applyRootMotion = false;
         AddReward(deathPenalty);
         scoreManager.IncreaseScore();
+
+        StartCoroutine(DelayedEpisodeEnd(5f));
+    }
+
+
+    private IEnumerator DelayedEpisodeEnd(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         EndEpisode();
     }
+
 
     Vector3 GetRandomSpawnPosition()
     {

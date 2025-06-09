@@ -5,7 +5,7 @@ public class SceneLoader : MonoBehaviour
 {
     public void LoadGameScene()
     {
-        SceneManager.LoadScene("ColosseumScene");
+        SceneManager.LoadScene("Test scene");
     }
 
     public void QuitGame()

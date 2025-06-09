@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
 
     public void ShowDeathScreen()
     {
-        // todo: call this method from another script when player dies
         deathScreen.SetActive(true);
         PositionScreen(deathScreen);
         Time.timeScale = 0f;
@@ -17,7 +16,6 @@ public class GameManager : MonoBehaviour
 
     public void ShowVictoryScreen()
     {
-        // todo: call this method from another script when player kills all enemies
         victoryScreen.SetActive(true);
         PositionScreen(victoryScreen);
         Time.timeScale = 0f;

@@ -8,9 +8,19 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     private bool isInvulnerable;
     public float invulnerabilityDuration = 0.5f;
 
+    public GameManager gameManager;
+
     void Start()
     {
         currentHealth = maxHealth;
+        if (gameManager == null)
+        {
+            gameManager = FindFirstObjectByType<GameManager>();
+            if (gameManager == null)
+            {
+                Debug.LogError("GameManager not found in the scene!");
+            }
+        }
         Debug.Log($"Player health initialized to {currentHealth}");
     }
 
@@ -41,6 +51,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     private void Die()
     {
         Debug.Log("Player has died.");
+        gameManager.ShowDeathScreen();
         SkeletonAgent[] agents = FindObjectsByType<SkeletonAgent>(FindObjectsSortMode.None);
         foreach (SkeletonAgent agent in agents)
         {

@@ -168,7 +168,6 @@ public class SkeletonAgent : Agent, IDamageable
         int deathType = Random.Range(1, 4);
         animator.SetInteger("deathType", deathType);
         AddReward(deathPenalty);
-        EndEpisode();
     }
 
     Vector3 GetRandomSpawnPosition()

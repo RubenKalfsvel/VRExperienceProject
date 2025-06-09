@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public GameObject deathScreen;
     public GameObject victoryScreen;
+    public TextMeshProUGUI victoryScreenScoreText;
     public Transform playerHead;
+    public ScoreManager scoreManager;
 
     public void ShowDeathScreen()
     {
@@ -16,9 +19,12 @@ public class GameManager : MonoBehaviour
 
     public void ShowVictoryScreen()
     {
-        victoryScreen.SetActive(true);
-        PositionScreen(victoryScreen);
         Time.timeScale = 0f;
+        victoryScreen.SetActive(true);
+        int score = scoreManager.GetScore();
+        PositionScreen(victoryScreen);
+        Debug.Log("Victory screen showing with score: " + score);
+        victoryScreenScoreText.text = score.ToString();
     }
 
     void PositionScreen(GameObject screen)

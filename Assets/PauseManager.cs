@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
@@ -67,5 +68,11 @@ public class PauseManager : MonoBehaviour
 
         pauseMenuUI.transform.position = newPos;
         pauseMenuUI.transform.rotation = Quaternion.LookRotation(forward);
+    }
+
+    public void LoadMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("StartScreen");
     }
 }

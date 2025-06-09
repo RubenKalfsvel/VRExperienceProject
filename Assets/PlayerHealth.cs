@@ -58,4 +58,9 @@ public class PlayerHealth : MonoBehaviour, IDamageable
             agent.OpponentDied();
         }
     }
+
+    public int GetcurrentHealth()
+    {
+        return (int)currentHealth;
+    }
 }

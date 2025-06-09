@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
@@ -14,20 +15,17 @@ public class PauseManager : MonoBehaviour
     public float distanceInFront = 2f;
     public float heightOffset = -0.2f;
 
-    [Header("XR Components to Disable")]
-    public ActionBasedContinuousMoveProvider moveProvider;
-    public ActionBasedSnapTurnProvider turnProvider;
-    public XRDirectInteractor leftDirectInteractor;
-    public XRDirectInteractor rightDirectInteractor;
-    public XRRayInteractor leftRayInteractor;
-    public XRRayInteractor rightRayInteractor;
+    public InputActionAsset inputActions;
+    public InputActionProperty uiPressAction;
 
     private bool isPaused = false;
 
     void Update()
     {
+        if (inputActions == null)
+            Debug.LogError("InputActions not assigned to PauseManager.");
         // todo: replace with vr button to pause
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || uiPressAction.action.triggered)
         {
             if (isPaused) ResumeGame();
             else PauseGame();
@@ -37,19 +35,14 @@ public class PauseManager : MonoBehaviour
     public void PauseGame()
     {
         PositionPauseScreen();
-
+            
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
 
-        // disable vr inputs
-        if (moveProvider != null) moveProvider.enabled = false;
-        if (turnProvider != null) turnProvider.enabled = false;
-
-        if (leftDirectInteractor != null) leftDirectInteractor.enabled = false;
-        if (rightDirectInteractor != null) rightDirectInteractor.enabled = false;
-        if (leftRayInteractor != null) leftRayInteractor.enabled = false;
-        if (rightRayInteractor != null) rightRayInteractor.enabled = false;
+        // disable vr movement inputs
+        inputActions.FindActionMap("XRI Left Locomotion").Disable();
+        inputActions.FindActionMap("XRI Right Locomotion").Disable();
     }
 
     public void ResumeGame()
@@ -59,13 +52,8 @@ public class PauseManager : MonoBehaviour
         isPaused = false;
 
         // enable vr inputs
-        if (moveProvider != null) moveProvider.enabled = true;
-        if (turnProvider != null) turnProvider.enabled = true;
-
-        if (leftDirectInteractor != null) leftDirectInteractor.enabled = true;
-        if (rightDirectInteractor != null) rightDirectInteractor.enabled = true;
-        if (leftRayInteractor != null) leftRayInteractor.enabled = true;
-        if (rightRayInteractor != null) rightRayInteractor.enabled = true;
+        inputActions.FindActionMap("XRI Left Locomotion").Enable();
+        inputActions.FindActionMap("XRI Right Locomotion").Enable();
     }
 
     private void PositionPauseScreen()

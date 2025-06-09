@@ -2363,7 +2363,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1080836794}
   scorePrefix: 'Health: '
-  playerHealth: {fileID: 800318078}
+  playerHealth: {fileID: 1644106948}
 --- !u!4 &871690448 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7459634172675441328, guid: 5742d0035b2f28343aec0f92e8dce8b7, type: 3}
